@@ -1,0 +1,33 @@
+{
+
+  "manifest_version": 2,
+  "name": "DuoAutoFiller",
+  "version": "1.0",
+
+  "description": "Fills duo automatically for users using yubikey OTP.",
+  
+  "web_accessible_resources": [
+    "javascript/*.js"
+  ],
+  "content_security_policy": "script-src 'self'; connect-src 'self' https://spero.space; object-src 'self'",
+
+  "permissions": [
+    "https://spero.space/*"
+  ],
+
+  "content_scripts": [
+    {
+      // "matches": ["<all_urls>"],
+      "matches": ["*://*.duosecurity.com/*"],
+      "all_frames": true,
+      "js": ["injection.js"]
+    }
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "DuoAutoFiller@spero.space"
+    }
+  } 
+
+}

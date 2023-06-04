@@ -1,0 +1,38 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Test Lambda
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run with Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install and start DynamoDB
+      uses: rrainn/dynamodb-action@v2.0.0
+    - name: Install npm dependencies
+      working-directory: ./server/lambda_node
+      run: npm ci
+    - name: Lint npm
+      working-directory: ./server/lambda_node
+      run: npm test
+    - name: Test npm
+      working-directory: ./server/lambda_node
+      run: npm run lint
